@@ -86,14 +86,15 @@ const Sidebar: React.FC<SidebarProps> = ({
     padding: "16px 0",
   };
 
-  const navItemStyle: React.CSSProperties = {
+  // Dynamic helper function to generate item styles based on active state
+  const getNavItemStyle = (page: string): React.CSSProperties => ({
     width: "100%",
     padding: isCollapsed ? "16px" : "16px 24px",
     display: "flex",
     alignItems: "center",
     justifyContent: isCollapsed ? "center" : "flex-start",
     gap: "16px",
-    background: currentPage === "history" ? COLORS.primary.p03 : "transparent",
+    background: currentPage === page ? COLORS.primary.p03 : "transparent",
     border: "none",
     cursor: "pointer",
     fontSize: "18px",
@@ -101,7 +102,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     color: COLORS.primary.p09,
     textAlign: "left",
     transition: "background 0.2s",
-  };
+  });
 
   const navTextStyle: React.CSSProperties = {
     display: isCollapsed ? "none" : "inline",
@@ -140,7 +141,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       <nav style={navStyle}>
         <button
-          style={navItemStyle}
+          style={getNavItemStyle("history")}
           onClick={() => onNavigate?.("history")}
           onMouseEnter={(e) => {
             if (currentPage !== "history") {
@@ -170,7 +171,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         </button>
 
         <button
-          style={navItemStyle}
+          style={getNavItemStyle("categories")}
           onClick={() => onNavigate?.("categories")}
           onMouseEnter={(e) => {
             if (currentPage !== "categories") {
