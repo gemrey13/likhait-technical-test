@@ -27,6 +27,12 @@ export function ExpenseForm({
       onSubmit,
     });
 
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  const maxDate = `${year}-${month}-${day}`; // sample "2026-08-08"
+
   const formStyle: React.CSSProperties = {
     display: "flex",
     flexDirection: "column",
@@ -83,6 +89,7 @@ export function ExpenseForm({
         label="Date"
         type="date"
         value={formData.date}
+        max={maxDate}
         onChange={(e) => handleChange("date", e.target.value)}
         error={errors.date}
         fullWidth

@@ -47,6 +47,12 @@ export function useExpenseForm({ initialData, onSubmit }: UseExpenseFormProps) {
 
     if (!formData.date) {
       newErrors.date = "Date is required";
+    } else {
+      // BONUS-001: Validate against future dates using local date format YYYY-MM-DD
+      const today = formatDate(new Date());
+      if (formData.date > today) {
+        newErrors.date = "Expense date cannot be in the future";
+      }
     }
 
     setErrors(newErrors);
