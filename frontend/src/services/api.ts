@@ -2,20 +2,25 @@
  * API service for communicating with the backend
  */
 
-import { Expense, ExpenseFormData, CategoryFormData } from "../types";
+import { Expense, ExpenseFormData, CategoryFormData, Category } from "../types";
 
 const API_BASE_URL = "http://localhost:3000/api";
 
 /**
  * Create a new category
  */
-export async function createCategory(data: CategoryFormData): Promise<Expense> {
+export async function createCategory(data: CategoryFormData): Promise<Category> {
+
+  const responseData = {
+    name: data.name
+  };
+
   const response = await fetch(`${API_BASE_URL}/categories`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ expense: data.name }),
+    body: JSON.stringify({ category: responseData }),
   });
 
   if (!response.ok) {
@@ -31,13 +36,13 @@ export async function createCategory(data: CategoryFormData): Promise<Expense> {
 export async function updateCategory(
   id: number,
   data: Partial<CategoryFormData>,
-): Promise<Expense> {
+): Promise<Category> {
   const response = await fetch(`${API_BASE_URL}/categories/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ expense: data.name }),
+    body: JSON.stringify({ category: data }),
   });
 
   if (!response.ok) {

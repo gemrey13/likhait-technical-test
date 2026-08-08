@@ -93,7 +93,7 @@ const CategoryPage: React.FC = () => {
             <div style={{ marginTop: "32px" }}>
               <CategoriesTable
                 categories={categories}
-                onCategoryUpdated={fetchCategories}
+                onCategoryUpdated={fetchCategory}
               />
             </div>
           </>

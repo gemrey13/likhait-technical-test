@@ -44,8 +44,9 @@ export function CategoriesTable({
 
   const confirmDelete = async () => {
     if (!deletingCategory) return;
+
     try {
-      await deleteCategory(editingCategory.id);
+      await deleteCategory(deletingCategory.id);
       setIsDeleteModalOpen(false);
       setDeletingCategory(null);
       onCategoryUpdated();
@@ -103,6 +104,7 @@ export function CategoriesTable({
 
   const actionButtonsStyle: React.CSSProperties = {
     display: "flex",
+    justifyContent: "center",
     gap: "0.5rem",
   };
 
@@ -192,7 +194,7 @@ export function CategoriesTable({
           </p>
           {deletingCategory && (
             <p style={{ marginBottom: "1.5rem", color: COLORS.text.secondary }}>
-              <strong>{deletingCategory.name}</strong> -{" "}
+              <strong>{deletingCategory.name}</strong>
             </p>
           )}
           <div
