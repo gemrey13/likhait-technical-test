@@ -21,6 +21,8 @@ class Api::ExpensesController < ApplicationController
     if expense.save
       render json: format_expense(expense), status: :created
     else
+      Rails.logger.error "Expense creation failed: #{expense.errors.full_messages.join(', ')}"
+
       render json: { errors: expense.errors.full_messages }, status: :unprocessable_entity
     end
   end
@@ -31,6 +33,8 @@ class Api::ExpensesController < ApplicationController
     if expense.update(expense_params)
       render json: format_expense(expense)
     else
+      Rails.logger.error "Expense updating failed: #{expense.errors.full_messages.join(', ')}"
+
       render json: { errors: expense.errors.full_messages }, status: :unprocessable_entity
     end
   end
