@@ -2,8 +2,10 @@
  * Form component for adding/editing expenses
  */
 
-import React from "react";
-import { ExpenseFormData } from "../types";
+import React, { useState, useEffect } from "react";
+import { Category, ExpenseFormData } from "../types";
+import { fetchCategories } from "../services/api";
+
 import { EXPENSE_CATEGORIES } from "../constants/categories";
 import { TextField, SelectBox, Button } from "../vibes";
 import { useExpenseForm } from "../hooks/useExpenseForm";
@@ -21,11 +23,30 @@ export function ExpenseForm({
   onCancel,
   submitLabel = "Add Expense",
 }: ExpenseFormProps) {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoadingCategories, setIsLoadingCategories] = useState(true);
+
   const { formData, errors, isSubmitting, handleChange, handleSubmit } =
     useExpenseForm({
       initialData,
       onSubmit,
     });
+
+  useEffect(() => {
+    getCategories();
+  }, []);
+
+  const getCategories = async () => {
+    try {
+      setIsLoadingCategories(true);
+      const data = await fetchCategories();
+      setCategories(data);
+    } catch (err) {
+      console.error("Error fetching categories:", err);
+    } finally {
+      setIsLoadingCategories(false);
+    }
+  };
 
   const formStyle: React.CSSProperties = {
     display: "flex",
@@ -39,9 +60,9 @@ export function ExpenseForm({
     marginTop: "0.5rem",
   };
 
-  const categoryOptions = EXPENSE_CATEGORIES.map((category) => ({
-    value: category,
-    label: category,
+  const categoryOptions = categories.map((category: Category) => ({
+    value: category.name,
+    label: category.name,
   }));
 
   return (
@@ -74,6 +95,8 @@ export function ExpenseForm({
         options={categoryOptions}
         value={formData.category}
         onChange={(e) => handleChange("category", e.target.value)}
+        placeholder={isLoadingCategories ? "Loading categories..." : "Select category"}
+        disabled={isLoadingCategories}
         error={errors.category}
         fullWidth
         required
